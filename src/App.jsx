@@ -61,12 +61,22 @@ function App() {
             </div>
           );
         })}
-        {/* Display checked items */}
+       
         <div className="checked-items">
           {toDos
             .filter((object) => object.status)
             .map((object) => (
-              <h3 key={object.id} style={{ color: "white",textDecoration:'line-through' }}>
+              <h3
+                key={object.id}
+                style={{
+                  color: "white",
+               
+                  marginTop:'8px',
+                  textDecoration: "line-through",
+                  
+                  
+                }}
+              >
                 {object.text}
               </h3>
             ))}

@@ -9,9 +9,12 @@
   
   .app {
     position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translate(-50%, -10%);
+    top: 80px;
+    left: 35%;
+    margin: auto;
+    align-items: center;
+    justify-items: center;
+    
   }
   
   .app .mainHeading h1 {
