@@ -1,10 +1,19 @@
-import React from "react";
-import { useState } from "react";
-import "./App.css";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addTodo, toggleTodo, deleteTodo } from './features/todoSlice';
+import './App.css';
 
 function App() {
-  const [toDos, setToDos] = useState([]);
-  const [toDo, setToDo] = useState("");
+  const [toDo, setToDo] = useState('');
+  const dispatch = useDispatch();
+  const toDos = useSelector((state) => state.todos.todos);
+
+  const handleAddTodo = () => {
+    if (toDo.trim()) {
+      dispatch(addTodo(toDo));
+      setToDo('');
+    }
+  };
 
   return (
     <div className="app">
@@ -12,7 +21,6 @@ function App() {
         <h1>ToDo List</h1>
       </div>
       <div className="subHeading">
-        <br />
         <h2> Add the to dos ☕ </h2>
       </div>
       <div className="input">
@@ -22,62 +30,42 @@ function App() {
           type="text"
           placeholder="🖊️ Add item..."
         />
-        <i
-          onClick={() =>
-            setToDos([...toDos, { id: Date.now(), text: toDo, status: false }])
-          }
-          className="fas fa-plus"
-        ></i>
+        <i onClick={handleAddTodo} className="fas fa-plus"></i>
       </div>
+
       <div className="todos">
-        {toDos.map((object) => {
-          return (
-            <div className="todo" key={object.id}>
-              <div className="left">
-                <input
-                  onChange={(e) => {
-                    setToDos(
-                      toDos.map((obj) => {
-                        if (obj.id === object.id) {
-                          obj.status = e.target.checked;
-                        }
-                        return obj;
-                      })
-                    );
-                  }}
-                  checked={object.status}
-                  type="checkbox"
-                />
-                <p>{object.text}</p>
-              </div>
-              <div className="right">
-                <i
-                  onClick={() =>
-                    setToDos(toDos.filter((obj) => obj.id !== object.id))
-                  }
-                  className="fas fa-times"
-                ></i>
-              </div>
+        {toDos.map((todo) => (
+          <div className="todo" key={todo.id}>
+            <div className="left">
+              <input
+                type="checkbox"
+                checked={todo.status}
+                onChange={() => dispatch(toggleTodo(todo.id))}
+              />
+              <p>{todo.text}</p>
             </div>
-          );
-        })}
-       
+            <div className="right">
+              <i
+                onClick={() => dispatch(deleteTodo(todo.id))}
+                className="fas fa-times"
+              ></i>
+            </div>
+          </div>
+        ))}
+
         <div className="checked-items">
           {toDos
-            .filter((object) => object.status)
-            .map((object) => (
+            .filter((todo) => todo.status)
+            .map((todo) => (
               <h3
-                key={object.id}
+                key={todo.id}
                 style={{
-                  color: "white",
-               
-                  marginTop:'8px',
-                  textDecoration: "line-through",
-                  
-                  
+                  color: 'white',
+                  textDecoration: 'line-through',
+                  marginTop: '8px',
                 }}
               >
-                {object.text}
+                {todo.text}
               </h3>
             ))}
         </div>
